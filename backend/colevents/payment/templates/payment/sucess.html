@@ -1,0 +1,57 @@
+<html>
+<body>
+<head>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="jquery.redirect.js"></script>
+</head>
+<div style="display:none">
+   	<input type="hidden" name="csrfmiddlewaretoken" value="{% csrf_token %}">
+</div>
+
+<div id="thankyou">
+	<h4>Thank You.</h4>
+	<h4>Your order status is {{ status }}</h4>
+	<h4>Your Transaction ID for this transaction is {{ txnid }}</h4>
+	<input type="hidden" id="txnid" value="{{ txnid }}">
+	<h4>We have received a payment of Rs {{ amount}}</h4>
+</div>
+
+</body>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		alert($("#txnid").val());
+		setTimeout('thankyou()', 1000);
+	});
+
+	function thankyou() {
+		$.ajax({
+			url : "{% url 'payment:thankyou' %}",
+	        type : 'GET',
+	        contentType: 'application/json',
+	        data : {
+	        	"txnid": $("#txnid").val(),
+	        },
+	        success:function(response) {
+               if(response) {
+               	console.log(response);
+               	var fname = response.first_name;
+               	var lname = response.last_name;
+               	var email = response.email;
+               	var phone = response.phone;
+               	var fest = response.fest_name;
+               	var event = response.event_name;
+               	var price = response.ticket_price;
+               	var tid = response.ticket_id;
+
+               	window.location.href = "http://www.festify.in/success/"+'&'+fname+'&'+lname+'&'+email+'&'+phone+'&'+fest+'&'+event+'&'+price+'&'+tid;
+               }
+           },
+           error:function(xhr) {
+           }
+	 	});
+	};
+
+</script>
+
+</html>

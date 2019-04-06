@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Ticket Booking Form</title>
+</head>
+<body>
+	<div>
+		<form action="{% url 'payment:payment_create' %}" method="POST" id="payment_form">
+			{% csrf_token %}
+			<input type="number" name="contact" placeholder="contact">
+			<input type="email" name="email" placeholder="email">
+			<input type="submit" name="submit">
+		</form>
+	</div>
+</body>
+</html>
